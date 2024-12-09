@@ -53,3 +53,14 @@ for i in usersToAdd:
         print(f'DID NOT ADD USER {i}')
 
 print(f'FOUND {len(usersToAdd)} USERS THAT NEED TO BE DELETED')
+
+whoami = subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout
+whoami.strip()
+for i in usersToRemove:
+    ans=input(f'WOULD YOU LIKE TO DELETE {i}?').lower()
+    if ans == 'y':
+        if i != whoami:
+            cmd = 'sudo deluser ' + i + ' --remove-home'
+            deleting_User=subprocess.run(cmd, shell=True)
+    else:
+        print(f'DID NOT DELETE USER {i}')
