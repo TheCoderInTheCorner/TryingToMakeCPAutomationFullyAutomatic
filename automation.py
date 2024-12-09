@@ -56,13 +56,21 @@ print(f'FOUND {len(usersToAdd)} USERS THAT NEED TO BE DELETED')
 
 whoami = subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout
 whoami.strip()
+if whoami.strip in usersToRemove 
+usersToRemove.pop()
 for i in usersToRemove:
     ans=input(f'WOULD YOU LIKE TO DELETE {i}?').lower()
     if ans == 'y':
-        if i.strip() != whoami:
-            cmd = 'sudo deluser ' + i + ' --remove-home'
-            deleting_User=subprocess.run(cmd, shell=True)
-        else:
-            print('YOU CANNOT DELETE YOURSELF')
+        cmd = 'sudo deluser ' + i + ' --remove-home'
+        deleting_User=subprocess.run(cmd, shell=True)
     else:
         print(f'DID NOT DELETE USER {i}')
+
+'''
+To DO LIST
+[1] Make it so user running automation cannto remove themselve
+[2] Make it cool letters and cool colors
+[3] Make everything look nice AND AND structure everything so it looks pretty
+
+'''
+
