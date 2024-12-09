@@ -1,6 +1,6 @@
+import subprocess
 import requests
 from bs4 import BeautifulSoup
-import subprocess
 
 url = "https://www.uscyberpatriot.org/Pages/Readme/cp17_tr2_m_ubu22_readme_jsgrxe68wc.aspx"
 response = requests.get(url)
@@ -8,7 +8,6 @@ response = requests.get(url)
 whoami = 'perry'
 #whoami = subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout
 whoami.strip()
-#print(whoami.stdout)
 
 
 # Retrieving the html text from the cyberpatriots website
@@ -31,4 +30,26 @@ for i in AuthorizedUsers:
 AuthorizedUsers = [item for item in AuthorizedUsers if 'password' not in item and item != '' and item != 'Authorized Users:']
 AuthorizedUsers.pop(0)
 
-print(AuthorizedUsers)
+# Deleting and Adding Users
+AuthorizedUsers = set(AuthorizedUsers)
+AllUsers = subprocess.run('ls /home', shell=True, capture_output=True, text=True).stdout.splitlines()
+for i in AllUsers:
+    AllUsers[AllUsers.index(i)] = i.strip()
+AllUsers = set(AllUsers)
+
+usersToRemove=AllUsers.difference(AuthorizedUsers)
+usersToAdd=AuthorizedUsers.difference(AllUsers)
+
+'''
+HEY!! USE ANSI ESCAPE CODES TO MAKE THIS LOOK GOOD LATER
+'''
+print(f'Found {len(usersToAdd)} Users That Need To Be Added') #Using ANSI escape codes
+for i in usersToAdd:
+    ans=input(f'Would You Like To Add User {i}?').lower()
+    if ans == 'y':
+        cmd = 'sudo adduser ' + i
+        adding_User=subprocess.run(cmd, shell=True)
+    else:
+        print(f'DID NOT ADD USER {i}')
+
+print(f'FOUND {len(usersToAdd)} USERS THAT NEED TO BE DELETED')
