@@ -59,8 +59,10 @@ whoami.strip()
 for i in usersToRemove:
     ans=input(f'WOULD YOU LIKE TO DELETE {i}?').lower()
     if ans == 'y':
-        if i != whoami:
+        if i.strip() != whoami:
             cmd = 'sudo deluser ' + i + ' --remove-home'
             deleting_User=subprocess.run(cmd, shell=True)
+        else:
+            print('YOU CANNOT DELETE YOURSELF')
     else:
         print(f'DID NOT DELETE USER {i}')
