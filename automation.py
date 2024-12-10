@@ -1,4 +1,4 @@
-import subprocess
+mport subprocess
 from bs4 import BeautifulSoup
 import requests
 
@@ -52,6 +52,16 @@ def return_code(command, passed, failed):
         print("!"*20)
         print(failed)
         print("!"*20)
+
+
+def get_prohibited_files(rmv:bool):
+    files = subprocess.run("sudo find /home \( -iname '*.mp3' -o -iname '*.mp4' -o -iname '*.mov' -o -iname '*.wav' \)",shell=True,capture_output=True,text=True)
+    
+    if(not rmv):
+        return files.stdout
+    if(rmv):
+        deletedFiles=subprocess.run("sudo find home \( -iname '*.mp3' -o -iname '*.mp4' -o -iname '*.mov' -o -iname '*.wav' \) -exec rm {} + >/dev/null",shell=True)
+        returnCode(deletedFiles,"Succesfully Deleted Files","FAILED to delete files")
 # =========================================
 
 
@@ -130,4 +140,15 @@ enableUFW = subprocess.run('sudo ufw enable', shell=True)
 return_code(enableUFW, 'SUCCESFULLY ENABLED UFW', 'ERROR: COULD NOT SUCCESFULLY ENBLE UFW')
 
 # =============== Finding Media Files ===============
+prohibitedFiles = get_prohibited_files(False)
+print(f'FOUND THESE PROHIBITED FILES: {prohibitedFiles}')
+delete = input('Delete Prohibited Files (y/n)?').lower
+while delete not in ['y','n']:
+    delete = input('Delete Prohibited Files (y/n)?').lower
+if(delete == 'y'):
+    get_prohibited_files(True)
+    return_code(get_prohibited_files,'DELETED THE PROHIBITED FILES','ERROR:COULD NOT DELETE THOSE FILES')
+else:
+    print('\033[32mDID NOT ELETE THOSE FILES\033[0m;')
+
 
