@@ -57,13 +57,13 @@ def return_code(command, passed, failed):
 
 # =============== User Adding And Deleting ===============
 
-whoami = 'perry'
-# whoami = subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout
-whoami.strip()
+#whoami = 'perry'
+thisIsWhoYouAre = subprocess.run('whoami', shell=True, capture_output=True, text=True).stdout
+thisIsWhoYouAre = thisIsWhoYouAre.strip()
 
 # getting text, getting authorized users, and cleaning data
 readMeText = get_readme_text('https://www.uscyberpatriot.org/Pages/Readme/cp17_tr2_m_ubu22_readme_jsgrxe68wc.aspx')  # !!!!!!!!!! CHANGE THE URL !!!!!!!!!!
-authorizedUsers = readMeText[readMeText.find(whoami):readMeText.find('Competition Guidelines')]
+authorizedUsers = readMeText[readMeText.find(thisIsWhoYouAre):readMeText.find('Competition Guidelines')]
 authorizedUsers = authorizedUsers.splitlines()
 
 # cleaning data
@@ -90,7 +90,7 @@ print(f'\033[1;32;5mFound {len(usersToAdd)} Users To Add\033[0m')
 for i in usersToAdd:
     ans = input(f'Would You Like To Add User {i} (y/n)?').lower()
     while ans not in ['y', 'n']:
-        ans = input(f'WOULD YOU LIKE TO DELETE {i}?').lower()
+        ans = input(f'WOULD YOU LIKE TO ADD {i}?').lower()
     if ans == 'y':
         cmd = 'sudo adduser ' + i
         addingUser = subprocess.run(cmd, shell=True)
@@ -99,11 +99,11 @@ for i in usersToAdd:
         print(f'\033[1;91mDID NOT ADD USER {i}\033[0m')
 
 # SAFE GUARD TO MAKE SURE YOU DO NOT DELETE YOUR SELF
-usersToRemove.discard(whoami)
+usersToRemove.discard(thisIsWhoYouAre)
 #####################################################
 
 # deleting users
-print(f'\033[1;91mFOUND {len(usersToAdd)} USERS THAT NEED TO BE DELETED\033[0m')
+print(f'\033[1;91;5mFOUND {len(usersToRemove)} USERS THAT NEED TO BE DELETED\033[0m')
 for i in usersToRemove:
     ans = input(f'WOULD YOU LIKE TO DELETE {i}?').lower()
     while ans not in ['y', 'n']:
@@ -115,4 +115,19 @@ for i in usersToRemove:
     else:
         print(f'\033[1;32mDID NOT DELETE USER {i}')
 
+
+# =============== UFW Config ===============
+print('\033[32mUFW DEFAULT DENY INCOMING\033[0m')
+defaultDenyIncoming = subprocess.run('sudo ufw default deny incoming', shell=True)
+return_code(defaultDenyIncoming, 'SUCCESFULY SET UFW INCOMING TO DENY','ERROR:COULD NOT SET DEFAULT INCOMING TO DENY')
+
+print('\033[32mUFW DEFAULT ALLOW OUTGOING\033[0m')
+defaultAllowOutgoing = subprocess.run('sudo ufw default allow outgoing', shell=True)
+return_code(defaultAllowOutgoing, 'SUCCESFULLY SET UFW OUTGOING TO ALLOW', 'ERROR: COULD NOT SET DEFAULT OUTGOING TO ALLOW')
+
+print('\033[32mUFW ENABLE\033[0m')
+enableUFW = subprocess.run('sudo ufw enable', shell=True)
+return_code(enableUFW, 'SUCCESFULLY ENABLED UFW', 'ERROR: COULD NOT SUCCESFULLY ENBLE UFW')
+
+# =============== Finding Media Files ===============
 
