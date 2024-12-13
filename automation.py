@@ -1,4 +1,4 @@
-mport subprocess
+import subprocess
 from bs4 import BeautifulSoup
 import requests
 
@@ -149,6 +149,6 @@ if(delete == 'y'):
     get_prohibited_files(True)
     return_code(get_prohibited_files,'DELETED THE PROHIBITED FILES','ERROR:COULD NOT DELETE THOSE FILES')
 else:
-    print('\033[32mDID NOT ELETE THOSE FILES\033[0m;')
+    print('\033[32mDID NOT DELETE THOSE FILES\033[0m;')
 
 
