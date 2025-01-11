@@ -102,9 +102,12 @@ for i in usersToAdd:
     while ans not in ['y', 'n']:
         ans = input(f'WOULD YOU LIKE TO ADD {i}?').lower()
     if ans == 'y':
-        cmd = 'sudo adduser ' + i
-        addingUser = subprocess.run(cmd, shell=True)
-        return_code(addingUser, f'\033[1;32mSuccessfully Added User {i}\033[0m', f'\033[1;91mERROR: COULD NOT ADD USER {i}\033[0m')
+        cmd = f"sudo adduser --disabled-password --gecos '' {i}"# --gecos sets all the room number thing to '' 
+        addingUser = subprocess.run(cmd, shell=True, check=True)
+        return_code(addingUser,f'\033[1;32mSuccessfully Added User {i}\033[0m',f'\033[1;91mERROR: COULD NOT ADD USER {i}\033[0m')
+        cmd = f"echo '{i}:Cy|)3R!)^TR!0T$' | sudo chpasswd"
+        settingPasswd = subprocess.run(cmd, shell=True, check=True)
+        return_code(settingPasswd, f'\033[1;32mSuccessfully Added Password For User {i}\033[0m', f'\033[1;91mERROR: COULD NOT ADD PASSWORD FOR USER {i}\033[0m')
     else:
         print(f'\033[1;91mDID NOT ADD USER {i}\033[0m')
 
@@ -131,24 +134,35 @@ print('\033[32mUFW DEFAULT DENY INCOMING\033[0m')
 defaultDenyIncoming = subprocess.run('sudo ufw default deny incoming', shell=True)
 return_code(defaultDenyIncoming, 'SUCCESFULY SET UFW INCOMING TO DENY','ERROR:COULD NOT SET DEFAULT INCOMING TO DENY')
 
-print('\033[32mUFW DEFAULT ALLOW OUTGOING\033[0m')
+print('\033[1;32mUFW DEFAULT ALLOW OUTGOING\033[0m')
 defaultAllowOutgoing = subprocess.run('sudo ufw default allow outgoing', shell=True)
 return_code(defaultAllowOutgoing, 'SUCCESFULLY SET UFW OUTGOING TO ALLOW', 'ERROR: COULD NOT SET DEFAULT OUTGOING TO ALLOW')
 
-print('\033[32mUFW ENABLE\033[0m')
+print('\033[1;32mUFW ENABLE\033[0m')
 enableUFW = subprocess.run('sudo ufw enable', shell=True)
 return_code(enableUFW, 'SUCCESFULLY ENABLED UFW', 'ERROR: COULD NOT SUCCESFULLY ENBLE UFW')
 
 # =============== Finding Media Files ===============
 prohibitedFiles = get_prohibited_files(False)
 print(f'FOUND THESE PROHIBITED FILES: {prohibitedFiles}')
-delete = input('Delete Prohibited Files (y/n)?').lower
-while delete not in ['y','n']:
-    delete = input('Delete Prohibited Files (y/n)?').lower
-if(delete == 'y'):
-    get_prohibited_files(True)
-    return_code(get_prohibited_files,'DELETED THE PROHIBITED FILES','ERROR:COULD NOT DELETE THOSE FILES')
+if(prohibitedFiles != ''):
+    delete = input('Delete Prohibited Files (y/n)?').lower()
+    while delete not in ['y','n']:
+        delete = input('Delete Prohibited Files (y/n)?').lower()
+    if(delete == 'y'):
+        get_prohibited_files(True)
+        return_code(get_prohibited_files,'\033[1;32mDELETED THE PROHIBITED FILES\033[0m','\033[1;91mERROR:COULD NOT DELETE THOSE FILES\033[0m')
+    else:
+        print('\033[1;32mDID NOT DELETE THOSE FILES\033[0m;')
 else:
-    print('\033[32mDID NOT DELETE THOSE FILES\033[0m;')
+    print('\033[1;32mNo Prohibited Files Found\033[0m')
 
+# =============== Insecure Permissions On Shadow File ==================
+InsecurePermissions = subprocess.run('sudo chmod 640 /etc/shadow', shell=True)
+return_code(InsecurePermissions, '\033[1;32mSUCCESFULLY SET PERMISSION ON SHADOW FILE\033[0m', '\033[1;91mERROR: COULD NOT SET PERMISSION ON SHADOW FLIE\033[0m')
 
+# =============== Disabling IPv4 Port Forwarding
+NewLine = "net.ipv4.ip_forward=0"
+cmd = f"sudo sed -i '/net.ipv4.ip_forward=/c\{NewLine}' /etc/sysctl.conf"
+disableIPv4Forwarding = subprocess.run(cmd,shell=True)
+return_code(disableIPv4Forwarding,'\033[1;32mSUCCESFULLY DISABLED IPv4 FORWARDING\033[0m','\033[1;91mERROR:COULD NOT SUCCESFULLY DISABLE IPv4 PORT FORWARDING\033[0m')
