@@ -12,10 +12,10 @@ This Linux Hardening Script Will Accomplish The Following
 [1]. Delete and add users based off of readme link
 [2]. UFW settings
 [3]. Find and delete forbidden media files
-[4]. Try to find a list of common "hacking" tools
+[4]. !!!STILL WORKING ON!!!: Try to find a list of common "hacking" tools
 [5]. Fix insecure permissions on shadow file
-[6]. Disable IPv4 Port Forwarding
-[7].
+[6]. Makes Machine Remember Last 5 Passwords
+[7]. Min and Max Passwd age
 [8].
 [9].
 [10].
@@ -161,8 +161,22 @@ else:
 InsecurePermissions = subprocess.run('sudo chmod 640 /etc/shadow', shell=True)
 return_code(InsecurePermissions, '\033[1;32mSUCCESFULLY SET PERMISSION ON SHADOW FILE\033[0m', '\033[1;91mERROR: COULD NOT SET PERMISSION ON SHADOW FLIE\033[0m')
 
-# =============== Disabling IPv4 Port Forwarding
+# =============== Disabling IPv4 Port Forwarding =================
 NewLine = "net.ipv4.ip_forward=0"
 cmd = f"sudo sed -i '/net.ipv4.ip_forward=/c\{NewLine}' /etc/sysctl.conf"
 disableIPv4Forwarding = subprocess.run(cmd,shell=True)
 return_code(disableIPv4Forwarding,'\033[1;32mSUCCESFULLY DISABLED IPv4 FORWARDING\033[0m','\033[1;91mERROR:COULD NOT SUCCESFULLY DISABLE IPv4 PORT FORWARDING\033[0m')
+
+# =============== PAM Files ==================
+cmd = "sudo sed -i '/PASS_MAX_DAYS/c\PASS_MAX_DAYS   90' /etc/login.defs"
+SetMaxAge = subprocess.run(cmd,shell=True)
+return_code(SetMaxAge,"\033[1;32mSUCCESFULLY SET MAX PASSWD AGE\033[0m","\033[1;91mERROR:COULD NOT SUCCESFULLY SET MAX PASSWD AGE\033[0m")
+
+cmd = "sudo sed -i '/PASS_MIN_DAYS/c\PASS_MIN_DAYS   7' /etc/login.defs"
+SetMinAge = subprocess.run(cmd,shell=True)
+return_code(SetMinAge,"\033[1;32mSUCCESFULLY SET MIN PASSWD AGE\033[0m","\033[1;91mERROR:COULD NOT SUCCESFULLY SET MIN PASSWD AGE\033[0m")
+
+extra = "1"
+cmd = f"sudo sed -i '/pam_unix.so/s/\(pam_unix.so\)/\{extra} remember=5/' /etc/pam.d/common-password"
+SetRememberToFive = subprocess.run(cmd,shell=True)
+return_code(SetRememberToFive,"\033[1;32mSUCCESFULLY SET REMEMBER TO 5\033[0m","\033[1;91mERROR:COULD NOT SUCCESFULLY SET REMEMBER TO 5\033[0m")
