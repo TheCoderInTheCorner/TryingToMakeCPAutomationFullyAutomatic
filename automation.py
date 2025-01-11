@@ -14,7 +14,7 @@ This Linux Hardening Script Will Accomplish The Following
 [3]. Find and delete forbidden media files
 [4]. Try to find a list of common "hacking" tools
 [5]. Fix insecure permissions on shadow file
-[6].
+[6]. Disable IPv4 Port Forwarding
 [7].
 [8].
 [9].
