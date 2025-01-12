@@ -16,7 +16,7 @@ This Linux Hardening Script Will Accomplish The Following
 [5]. Fix insecure permissions on shadow file
 [6]. Makes Machine Remember Last 5 Passwords
 [7]. Min and Max Passwd age
-[8].
+[8]. Promoting and Demoting Admins
 [9].
 [10].
 
@@ -212,3 +212,26 @@ authorizedAdmin = set(authorizedAdmin)
 promote = authorizedAdmin.difference(allAdmins)
 demote = allAdmins.difference(authorizedAdmin)
 
+print(f"\033[1;32;5mFOUND {len(promote)} USERS TO PROMOTE TO ADMIN PRIVELAGE\033[0m")
+
+# Promoting Users
+for i in promote:
+    promoteOrNo = input(f'\033[1;32mDO YOU WANT TO PROMOTE USER {i} TO ADMIN PRIVELAGE (y/n)?\033[0m').lower()
+    while promoteOrNo not in ['y','n']:
+        promoteOrNo = input(f'\033[1;32mDO YOU WANT TO PROMOTE USER {i} TO ADMIN PRIVELAGE (y/n)?\033[0m').lower()
+    if(promoteOrNo == 'y'):
+        promoteUser = subprocess.run(f'sudo usermod -aG sudo {i}', shell=True)
+        return_code(promoteUser,f'\033[1;32mSUCCESFULLY PROMOTED USER {i} TO ADMIN PRIVELAGES\033[0m',f'\033[1;91mERROR COULD NOT PROMOTE USER {i} TO ADMIN PRIVELAGES\033[0m')
+    else:
+        print(f"\033[1;91mDID NOT PROMOTE USER {i} TO ADMIN PRIVELAGES\033[0m")
+
+# Demoting Users
+for i in demote:
+    demoteOrNo = input(f'\033[1;91mDO YOU WANT TO DEMOTE USER {i} FROM ADMIN PRIVELAGES (y/n)?\033[0m').lower()
+    while demoteOrNo not in ['y','n']:
+        demoteOrNo = input(f'\033[1;91mDO YOU WANT TO DEMOTE USER {i} FROM ADMIN PRIVELAGES (y/n)?\033[0m').lower()
+    if(demoteOrNo == 'y'):
+        demoteUser = subprocess.run(f'sudo deluser {i} sudo', shell=True)
+        return_code(demoteUser,f'\033[1;91mSUCCESFULLY DEMOTED USER {i} FROM ADMIN PRIVELAGES\033[0m',f'\033[1;91mERROR COULD NOT DEMOTE USER {i} FROM ADMIN PRIVELAGES\033[0m')
+    else:
+        print(f'\033[1;32mDID NOT DEMOTE USER {i}\033[0m')
