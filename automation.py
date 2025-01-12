@@ -178,5 +178,37 @@ return_code(SetMinAge,"\033[1;32mSUCCESFULLY SET MIN PASSWD AGE\033[0m","\033[1;
 
 extra = "1"
 cmd = f"sudo sed -i '/pam_unix.so/s/\(pam_unix.so\)/\{extra} remember=5/' /etc/pam.d/common-password"
-SetRememberToFive = subprocess.run(cmd,shell=True)
-return_code(SetRememberToFive,"\033[1;32mSUCCESFULLY SET REMEMBER TO 5\033[0m","\033[1;91mERROR:COULD NOT SUCCESFULLY SET REMEMBER TO 5\033[0m")
+SetR5 = input('\033[1;32mSet remember to 5 (y/n)?\033[0m').lower()
+while SetR5 not in ['y','n']:
+    SetR5 = input('\033[1;32mSet remember to 5 (y/n)?\033[0m').lower()
+
+if(SetR5 == 'y'):
+    SetRememberToFive = subprocess.run(cmd,shell=True)
+    return_code(SetRememberToFive,"\033[1;32mSUCCESFULLY SET REMEMBER TO 5\033[0m","\033[1;91mERROR:COULD NOT SUCCESFULLY SET REMEMBER TO 5\033[0m")
+else:
+    print('\033[1;91mDID NOT SET REMEMBER TO 5\033[0m')
+
+# =============== Admin Privelages ==================
+
+# Getting List Of Authorized Admin
+
+authorizedAdmin = readMeText[readMeText.find(thisIsWhoYouAre):readMeText.find('Authorized Users')]
+authorizedAdmin = authorizedAdmin.splitlines()
+
+# cleaning data
+authorizedAdmin = [item for item in authorizedAdmin if 'password' not in item and item != '' and item != 'Authorized Users:']
+authorizedAdmin[authorizedAdmin.index(f'{thisIsWhoYouAre} (you)')] = thisIsWhoYouAre
+strip_all_items_in_list(authorizedAdmin)
+
+# Getting List Of All Admin
+allAdmins = subprocess.run('getent group sudo | cut -d: -f4',shell=True,capture_output=True,text=True).stdout
+allAdmins = allAdmins.split(',')
+strip_all_items_in_list(allAdmins)
+
+# Promotions and demotions
+allAdmins = set(allAdmins)
+authorizedAdmin = set(authorizedAdmin)
+
+promote = authorizedAdmin.difference(allAdmins)
+demote = allAdmins.difference(authorizedAdmin)
+
