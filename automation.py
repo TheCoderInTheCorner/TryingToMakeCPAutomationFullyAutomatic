@@ -3,8 +3,6 @@ from bs4 import BeautifulSoup
 import requests
 
 '''
-bhfdhgd
-jhsjhdjhd
 Created By Basu Khadka On 12/9/2024 7:38PM
 
 This Linux Hardening Script Will Accomplish The Following
@@ -63,6 +61,15 @@ def get_prohibited_files(rmv:bool):
         deletedFiles=subprocess.run("sudo find home \( -iname '*.mp3' -o -iname '*.mp4' -o -iname '*.mov' -o -iname '*.wav' \) -exec rm {} + >/dev/null",shell=True)
         returnCode(deletedFiles,"Succesfully Deleted Files","FAILED to delete files")
 # =========================================
+
+
+# =============== Warnings and Checks ==================
+print("\033[1;33m===================== !IMPORTANT! =====================\033[0m")
+
+print("\033[1;91m!!!Here are some things to consider before running this script!!!\033[0m")
+print("1. In the readme, your name is the first name in authorized users\n\033[1;91m2. MAKE SURE YOU CHANGE THE README URL\033[0m\n3. DONT DO SUDO PYTHON ./AUTOMATION.PY JUST DO PYTHON ./AUTOMATION.PY\n")
+
+print("\033[1;33m=====================================================\033[0m")
 
 
 # =============== User Adding And Deleting ===============
