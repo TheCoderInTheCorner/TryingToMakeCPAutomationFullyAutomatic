@@ -21,6 +21,13 @@ This Linux Hardening Script Will Accomplish The Following
 
 '''
 
+'''
+TO DO LIST:
+1. after setting MAX PASSWD days in login.defs, the max passwd age is not enforced in existing users, there is a easy fix
+    sudo chage -M 90 username
+
+'''
+
 
 # =============== Functions ===============
 
