@@ -15,7 +15,7 @@ This Linux Hardening Script Will Accomplish The Following
 [6]. Makes Machine Remember Last 5 Passwords
 [7]. Min and Max Passwd age
 [8]. Promoting and Demoting Admins
-[9].
+[9]. Actually makes all users have a max and min password len
 [10].
 
 
@@ -242,3 +242,16 @@ for i in demote:
         return_code(demoteUser,f'\033[1;91mSUCCESFULLY DEMOTED USER {i} FROM ADMIN PRIVELAGES\033[0m',f'\033[1;91mERROR COULD NOT DEMOTE USER {i} FROM ADMIN PRIVELAGES\033[0m')
     else:
         print(f'\033[1;32mDID NOT DEMOTE USER {i}\033[0m')
+
+# =============== Enforcing Max and Min Password Days ==================
+allUsers = subprocess.run('ls /home', shell=True, capture_output=True, text=True).stdout.splitlines()
+strip_all_items_in_list(allUsers)
+
+for i in allUsers:
+    cmd = f"sudo chage -M 90 {i}"
+    setMax = subprocess.run(cmd,shell=True)
+    return_code(setMax,f"\033[1;32mSUCCCESFULLY SET MAX PASSWORD LENGTH FOR USER {i}\033[0m;",f"\033[1;32mCOULD NOT SUCCESFULLY SET MAX PASSWD FOR USER {i}\033[0m")    
+    cmd = f"sudo chage -m 7 {i}"
+    setMax = subprocess.run(cmd,shell=True)
+    return_code(setMax,f"\033[1;32mSUCCCESFULLY SET MIN PASSWORD LENGTH FOR USER {i}\033[0m;",f"\033[1;32mCOULD NOT SUCCESFULLY SET MIN PASSWD FOR USER {i}\033[0m")
+
