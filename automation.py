@@ -262,3 +262,14 @@ for i in allUsers:
     setMax = subprocess.run(cmd,shell=True)
     return_code(setMax,f"\033[1;32mSUCCCESFULLY SET MIN PASSWORD LENGTH FOR USER {i}\033[0m;",f"\033[1;32mCOULD NOT SUCCESFULLY SET MIN PASSWD FOR USER {i}\033[0m")
 
+# =============== Locking Root Account and other Root Shenanigans ==================
+cmd = "sudo passwd -l root"
+disableDirectRootLogin = subprocess.run(cmd, shell=True)
+return_code(disableDirectRootLogin,'\033[1;91mSUCCESFULLY DISABLED DIRECT ROOT LOGIN \033[0m', '\033[1;91mERROR COULD NOT DISABLE DIRECT ROOT LOGIN \033[0m')
+
+print("There are some other things to do that I have not implemented in the script")
+print("1) Make sudo have to always authenitcate using sudo visudo and adding Defaults   authenticate")
+print("2) Disable root loging through ssh")
+print("3) Check ports and make sure nothing weird is going on")
+print("4) Disable uneeded services")
+print("5) Disable 'Hacking' tools")
