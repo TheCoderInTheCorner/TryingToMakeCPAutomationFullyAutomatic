@@ -264,8 +264,11 @@ for i in allUsers:
 
 # =============== Locking Root Account and other Root Shenanigans ==================
 cmd = "sudo passwd -l root"
-disableDirectRootLogin = subprocess.run(cmd, shell=True)
-return_code(disableDirectRootLogin,'\033[1;91mSUCCESFULLY DISABLED DIRECT ROOT LOGIN \033[0m', '\033[1;91mERROR COULD NOT DISABLE DIRECT ROOT LOGIN \033[0m')
+choice = input('disable root?').lower()
+
+if(choice == 'y'):
+    disableDirectRootLogin = subprocess.run(cmd, shell=True)
+    return_code(disableDirectRootLogin,'\033[1;91mSUCCESFULLY DISABLED DIRECT ROOT LOGIN \033[0m', '\033[1;91mERROR COULD NOT DISABLE DIRECT ROOT LOGIN \033[0m')
 
 print("There are some other things to do that I have not implemented in the script")
 print("1) Make sudo have to always authenitcate using sudo visudo and adding Defaults   authenticate")
