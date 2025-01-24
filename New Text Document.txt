@@ -1,0 +1,46 @@
+https://www.uscyberpatriot.org/Pages/Readme/cp17_sf_gsms_m_mint21_readme_j22g37kc1k.aspx
+
+
+https://hackviser.com/tactics/hardening/smb
+
+
+
+
+
+NOTE: This is a 2 part question with 2 answers. You must correctly 
+answer all parts in order to get credit.
+
+There is a netcat backdoor on this computer. What port is the netcat 
+backdoor configured to listen on?
+
+( EXAMPLE: 8668 )
+
+ANSWER: <Type Answer Here>
+
+After a connection is made to this port, ncat automatically executes a command. 
+What is the exact command that ncat executes when a connection is made?
+
+( EXAMPLE: /bin/bash )
+
+ANSWER: <Type Answer Here>
+
+
+
+
+
+
+
+
+
+
+
+The samba configuration file enumerates which users are allowed to connect 
+to the SMB share "ecorp" hosted on this machine. However, some users have 
+had their accounts disabled using the "smbpasswd" utility.
+
+Which two authorized users have had their accounts disabled?
+
+( EXAMPLE: twellick )
+
+ANSWER: <Type Answer Here>
+ANSWER: <Type Answer Here>
